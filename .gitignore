@@ -30,6 +30,9 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
+# dask
+dask-worker-space/
+
 # Personel stuff
 data/
 images/
