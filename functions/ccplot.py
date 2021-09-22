@@ -21,29 +21,15 @@ def get_ideal_data(t2m_da, p11_inital_val, p12_initial_value):
     return temparr, preciparr1, preciparr2
 
 # The main plot function
-def plot(ds, binned_ds, temparr, preciparr1, preciparr2, percentile_val = 0.99):
-    """
-    Plot the C-C scaling plot between precipitation and temperature data after binning
-    -----
-    Input values - provide the dataset (containing both precipitation and temperature data for one
-    particular lat and lon); bins (optional, default
-    values are chosen by the method of data binning if equal frequencies); percentile_val (0.99, 0.5, etc.);
-    p11_inital_val, and p12_initial_value (which are the initial values of precipitation for ideal C-C scaling
-    background plot)
-    -----
-    Output - Plot of C-C scaling for the precipitation and temperature for that particular lat-lon combination
-    """
+def plot(ds, binned_ds, temparr, preciparr1, preciparr2, **kwargs):
     # set the data arrays to be used.
     t2m = ds.t2m
     precip = ds.precipitationCal
 
     # Make the figure
-    fig = plt.figure(figsize=(7,5))
-    binned_ds.quantile(percentile_val, interpolation = 'midpoint').precipitationCal.plot(marker = 'o', yscale = 'log', lw = 0., color = 'blue')
+    binned_ds.precipitationCal.plot(**kwargs)
+    # binned_ds.precipitationCal.plot(marker = 'o', yscale = 'log', lw = 0., color = 'blue')
     plt.semilogy(temparr, preciparr1, 'k--', alpha = 0.4)
     plt.semilogy(temparr, preciparr2, 'k--', alpha = 0.4)
     plt.xlim(t2m.min(),t2m.max())
     plt.yticks([1, 10, 100])
-
-    fig.gca().yaxis.set_ticks_position('both')
-    fig.tight_layout()

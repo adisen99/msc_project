@@ -16,13 +16,14 @@ def equalObs(x, nbin):
 # Using function
 
 # get binned data
-def get_binned(ds, bins):
+def get_binned(ds, percentile_val, bins = None, bin_nr = 12):
     t2m = ds.t2m
-    # TODO - Allow the user to input the value of bins as int and make the default binning method as the only method
     if bins == None:
         #create histogram with equal-frequency bins
-        n, bins, patches = plt.hist(t2m, equalObs(t2m, 12))
+        n, bins, patches = plt.hist(t2m, equalObs(t2m, bin_nr))
         plt.show()
     else:
         bins = np.array(bins)
-    binned_ds = ds.groupby_bins('t2m', bins)
+
+    binned_ds = ds.groupby_bins('t2m', bins).quantile(percentile_val, interpolation = 'midpoint')
+    return binned_ds
