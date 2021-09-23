@@ -20,8 +20,9 @@ def get_binned(ds, percentile_val, bins = None, bin_nr = 12):
     t2m = ds.t2m
     if bins == None:
         #create histogram with equal-frequency bins
-        n, bins, patches = plt.hist(t2m, equalObs(t2m, bin_nr))
-        plt.show()
+        # n, bins, patches = plt.hist(t2m, equalObs(t2m, bin_nr))
+        # plt.show()
+        bins = equalObs(t2m, bin_nr)
     else:
         bins = np.array(bins)
 
