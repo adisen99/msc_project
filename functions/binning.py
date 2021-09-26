@@ -28,18 +28,10 @@ def get_binned(ds, percentile_val = 0.99, var = "t2m", bins = None, bin_nr = 12)
     binned_ds = ds.groupby_bins(ds[var], bins).quantile(percentile_val, interpolation = 'midpoint')
     return binned_ds
 
-def get_binned_3d(ds, min = 1, percentile_val = 0.99, var = "t2m", var_bin = "t2m_bins", bin_nr = 12):
+def get_binned_3d(ds, percentile_val = 0.99, var = "t2m", var_bin = "t2m_bins", bin_nr = 12):
 
-    precip = ds.precipitationCal
-    temp = ds[var]
-
-    precip = xr.where(precip < min, np.nan, precip)
-    temp = temp.where(precip != np.nan)
-    
-    ds_comb = xr.merge([precip, temp]).chunk(dict(time=-1))
-
-    precip = ds_comb.precipitationCal.to_numpy()
-    temp = ds_comb[var].to_numpy()
+    precip = ds.precipitationCal.to_numpy()
+    temp = ds[var].to_numpy()
 
     bins = np.apply_along_axis(equalObs, 0, temp, bin_nr)
 
