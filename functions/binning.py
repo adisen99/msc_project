@@ -28,6 +28,40 @@ def get_binned(ds, percentile_val = 0.99, var = "t2m", bins = None, bin_nr = 12)
     binned_ds = ds.groupby_bins(ds[var], bins).quantile(percentile_val, interpolation = 'midpoint')
     return binned_ds
 
+def get_binned_3d_old(ds, percentile_val = 0.99, var = "t2m", var_bin = "t2m_bins", bin_nr = 12):
+
+    precip = ds.precipitationCal.to_numpy()
+    temp = ds[var].to_numpy()
+
+    bins = np.apply_along_axis(equalObs, 0, temp, bin_nr)
+
+    binned_ds = np.zeros((len(bins[0]), len(bins[0][0])))
+
+    for lat in range(len(bins[0])):
+        for lon in range(len(bins[0][0])):
+            y = ds.isel(lat = lat, lon = lon).groupby_bins(ds[var].isel(lat = lat, lon = lon), bins[:, lat, lon]).quantile(percentile_val, interpolation='midpoint')
+
+            bin_array = y.coords[var_bin].to_numpy()
+
+            bin_mids = []
+
+            for i in range(0, len(bin_array)):
+                bin_mid = (bin_array[i].left + bin_array[i].right)*0.5
+                bin_mids.append(bin_mid)
+
+            mids = np.array(bin_mids)
+
+            if np.isnan(np.sum(y.precipitationCal.to_numpy())):
+                slope = np.nan
+            else:
+                slope = np.polyfit(mids, y.precipitationCal.to_numpy(), 1)[0]
+
+            binned_ds[lat, lon] = binned_ds[lat, lon] + slope
+
+    ccscale = xr.DataArray(binned_ds, dims=("lat", "lon"), coords={"lat": ds.coords['lat'], "lon": ds.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
+
+    return ccscale
+
 def get_binned_3d(ds, percentile_val = 0.99, var = "t2m", var_bin = "t2m_bins", bin_nr = 12):
 
     precip = ds.precipitationCal.to_numpy()
@@ -36,13 +70,13 @@ def get_binned_3d(ds, percentile_val = 0.99, var = "t2m", var_bin = "t2m_bins", 
     bins = np.apply_along_axis(equalObs, 0, temp, bin_nr)
 
     binned_ds = np.zeros((len(bins[0]), len(bins[0][0])))
-    
+
     for lat in range(len(bins[0])):
         for lon in range(len(bins[0][0])):
             y = ds.isel(lat = lat, lon = lon).groupby_bins(ds[var].isel(lat = lat, lon = lon), bins[:, lat, lon]).quantile(percentile_val, interpolation='midpoint')
-            
+
             bin_array = y.coords[var_bin].to_numpy()
-        
+
             bin_mids = []
 
             for i in range(0, len(bin_array)):
@@ -50,14 +84,14 @@ def get_binned_3d(ds, percentile_val = 0.99, var = "t2m", var_bin = "t2m_bins", 
                 bin_mids.append(bin_mid)
 
             mids = np.array(bin_mids)
-        
+
             if np.isnan(np.sum(y.precipitationCal.to_numpy())):
                 slope = np.nan
             else:
                 slope = np.polyfit(mids, y.precipitationCal.to_numpy(), 1)[0]
-            
+
             binned_ds[lat, lon] = binned_ds[lat, lon] + slope
 
     ccscale = xr.DataArray(binned_ds, dims=("lat", "lon"), coords={"lat": ds.coords['lat'], "lon": ds.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
-    
+
     return ccscale
