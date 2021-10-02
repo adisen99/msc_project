@@ -1,0 +1,2 @@
+#!/bin/bash
+cat links.txt | xargs -n 1 -P 5 wget --load-cookies ~/.urs_cookies --save-cookies ~/.urs_cookies --auth-no-challenge=on --keep-session-cookies --content-disposition -q
