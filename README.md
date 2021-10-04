@@ -13,6 +13,8 @@ Code, functions and notebooks used for my Masters Project/Thesis.
 ### TODO -
 
 - [ ] Refactor the binning for 3d plotting
+- [x] Get slope and significance of the fit
+- [x] Take the precipitation cutoff using mm/day rather than mm/hr i.e. use a forward/backward running sum. (Ask- should I use precipitation daily rate for the bining or use `mm/hr` for binning and keep `mm/day` values only for selecting the cut-off)
 - [x] Bin temperature data and take 99th and 50th percentile of precipitation.
 - [x] Bin the temperature data such that the precipitation has same frequency in each bin.
 - [x] Get the slope of the final plot.

@@ -47,6 +47,3 @@ def main(link_list):
     results = ThreadPool(4).imap_unordered(download_url, urls)
     for r in results:
         print(r)
-
-if __name__ == "__main__":
-    main()
