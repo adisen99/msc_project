@@ -7,12 +7,12 @@ from tqdm import tqdm
 import os
 
 # after renaming the files nad moving to new directory
-with os.scandir('/home/aditya/github/msc_project/data/GPM_ncdata/') as it:
+with os.scandir('../data/GPM_ncdata') as it:
     for entry in tqdm(it):
         if entry.name.endswith('.nc') and entry.is_file():
             data = nc.open_data(entry.path)
             data.to_latlon(lon = [50, 95], lat = [5, 40], res = [0.25, 0.25])
-            data.to_nc('/home/aditya/github/msc_project/data/GPM_lowres_data/' + entry.name)
+            data.to_nc('../data/GPM_lowres_data' + entry.name)
 
 ####### Old code ###########
 

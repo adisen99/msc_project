@@ -24,15 +24,15 @@ def get_res(x, y):
     # if np.isnan(np.sum(y)):
     #     slope, intercept, r, p, se = stats.linregress(x, y)
     # else:
-    slope, intercept, r, p, se = stats.linregress(x, y)
+    slope, _, _, p, _ = stats.linregress(x, y)
 
-    return slope, intercept, r, p, se
+    return slope, p
 
 def get_slope(x, y):
     # if np.isnan(np.sum(y)):
     #     slope, intercept, r, p, se = stats.linregress(x, y)
     # else:
-    slope = stats.linregress(x, y)[0]
+    slope, _, _, _, _ = stats.linregress(x, y)
 
     return slope
 
@@ -40,7 +40,7 @@ def get_pval(x, y):
     # if np.isnan(np.sum(y)):
     #     slope, intercept, r, p, se = stats.linregress(x, y)
     # else:
-    p = stats.linregress(x, y)[3]
+    _, _, _, p, _ = stats.linregress(x, y)
 
     return p
 
@@ -63,7 +63,7 @@ def get_binned(ds, percentile_val = 0.99, var = "t2m", bins = None, bin_nr = 12)
 
 def get_binned_3d(ds, percentile_val = 0.99, bin_nr = 12):
 
-    precip = ds.precipitationCal.to_numpy()
+    # precip = ds.precipitationCal.to_numpy()
     t2m = ds['t2m'].to_numpy()
     d2m = ds['d2m'].to_numpy()
 
@@ -83,8 +83,8 @@ def get_binned_3d(ds, percentile_val = 0.99, bin_nr = 12):
             y_t2m = ds.isel(lat = lat, lon = lon).groupby_bins(ds['t2m'].isel(lat = lat, lon = lon), bins_t2m[:, lat, lon]).quantile(percentile_val, interpolation='midpoint')
             y_d2m = ds.isel(lat = lat, lon = lon).groupby_bins(ds['d2m'].isel(lat = lat, lon = lon), bins_d2m[:, lat, lon]).quantile(percentile_val, interpolation='midpoint')
 
-            slope_t2m, intercept_t2m , r_t2m, p_t2m, se_t2m  = get_res(mids_t2m[:, lat, lon], y_t2m.precipitationCal.to_numpy())
-            slope_d2m, intercept_d2m , r_d2m, p_d2m, se_d2m  = get_res(mids_d2m[:, lat, lon], y_d2m.precipitationCal.to_numpy())
+            slope_t2m, p_t2m = get_res(mids_t2m[:, lat, lon], y_t2m.precipitationCal.to_numpy())
+            slope_d2m, p_d2m = get_res(mids_d2m[:, lat, lon], y_d2m.precipitationCal.to_numpy())
 
             binned_ds_t2m[lat, lon] = binned_ds_t2m[lat, lon] + slope_t2m
             binned_ds_sig_t2m[lat, lon] = binned_ds_sig_t2m[lat, lon] + p_t2m
@@ -104,7 +104,7 @@ def get_binned_3d(ds, percentile_val = 0.99, bin_nr = 12):
 
 def get_binned_3d_test(ds, percentile_val = 0.99, bin_nr = 12):
 
-    precip = ds.precipitationCal.to_numpy()
+    # precip = ds.precipitationCal.to_numpy()
     t2m = ds['t2m'].to_numpy()
     d2m = ds['d2m'].to_numpy()
 
@@ -130,8 +130,8 @@ def get_binned_3d_test(ds, percentile_val = 0.99, bin_nr = 12):
     slope_t2m = np.squeeze(np.apply_over_axes(get_slope, binned_ds_t2m, [0,1]))
     slope_d2m = np.squeeze(np.apply_over_axes(get_slope, binned_ds_d2m, [0,1]))
 
-    p_t2m = np.squeeze(np.apply_over_axes(get_slope, binned_ds_t2m, [0,1]))
-    p_d2m = np.squeeze(np.apply_over_axes(get_slope, binned_ds_d2m, [0,1]))
+    p_t2m = np.squeeze(np.apply_over_axes(get_pval, binned_ds_t2m, [0,1]))
+    p_d2m = np.squeeze(np.apply_over_axes(get_pval, binned_ds_d2m, [0,1]))
 
     ccscale_t2m_slope = xr.DataArray(slope_t2m, dims=("lat", "lon"), coords={"lat": ds.coords['lat'], "lon": ds.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
 
