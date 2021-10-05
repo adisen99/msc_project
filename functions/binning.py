@@ -121,8 +121,8 @@ def get_binned_3d_test(ds, percentile_val = 0.99, bin_nr = 12):
             y_t2m = ds.isel(lat = lat, lon = lon).groupby_bins(ds['t2m'].isel(lat = lat, lon = lon), bins_t2m[:, lat, lon]).quantile(percentile_val, interpolation='midpoint')
             y_d2m = ds.isel(lat = lat, lon = lon).groupby_bins(ds['d2m'].isel(lat = lat, lon = lon), bins_d2m[:, lat, lon]).quantile(percentile_val, interpolation='midpoint')
 
-            binned_ds_t2m[:, lat, lon] = binned_ds_t2m[:, lat, lon] + y_t2m.to_numpy()
-            binned_ds_d2m[:, lat, lon] = binned_ds_d2m[:, lat, lon] + y_d2m.to_numpy()
+            binned_ds_t2m[:, lat, lon] = binned_ds_t2m[:, lat, lon] + y_t2m.precipitationCal.to_numpy()
+            binned_ds_d2m[:, lat, lon] = binned_ds_d2m[:, lat, lon] + y_t2m.precipitationCal.to_numpy()
 
     np.append(binned_ds_t2m, mids_t2m, axis = 0)
     np.append(binned_ds_d2m, mids_d2m, axis = 0)

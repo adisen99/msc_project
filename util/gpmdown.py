@@ -1,10 +1,9 @@
+############### ASYNC DOWNLOAD #############
+
 # import os
 # import asyncio
 # import aiohttp  # pip install aiohttp
 # import aiofiles  # pip install aiofiles
-
-# REPORTS_FOLDER = "reports"
-# FILES_PATH = os.path.join(REPORTS_FOLDER, "files")
 
 # async def fetch_file(url):
 #     sema = asyncio.BoundedSemaphore(5)
@@ -21,7 +20,7 @@
 #         if not os.path.exists(fname):
 #             await outfile.write(data)
 
-# def main(link_list):
+# def down(link_list):
 #     # Get the urls from the txt file as a list using readline
 #     file1 = open(link_list, 'r')
 #     Lines = file1.readlines()
@@ -40,13 +39,9 @@
 
 #     print("COMPLETE: downloaded all files in the list")
 
-# THE BASIC code
-# Set the URL string to point to a specific data URL. Some generic examples are:
-#   https://servername/data/path/file
-#   https://servername/opendap/path/file[.format[?subset]]
-#   https://servername/daac-bin/OTF/HTTP_services.cgi?KEYWORD=value[&KEYWORD=value]
-
+############# BASIC DOWNLOAD ###########
 import requests
+import os
 
 def down(link_list):
     # Get the urls from the txt file as a list using readline
@@ -66,12 +61,15 @@ def down(link_list):
         file_name_end_pose = url.find("?")
         fname = url[file_name_start_pos:file_name_end_pose]
 
-        result = requests.get(url)
-        try:
-           result.raise_for_status()
-           f = open(fname,'wb')
-           f.write(result.content)
-           f.close()
-           print('contents of URL written to '+ fname)
-        except:
-           print('requests.get() returned an error code '+str(result.status_code))
+        if not os.path.exists(fname):
+            result = requests.get(url)
+            try:
+               result.raise_for_status()
+               f = open(fname,'wb')
+               f.write(result.content)
+               f.close()
+               print('contents of URL written to '+ fname)
+            except:
+               print('requests.get() returned an error code '+str(result.status_code))
+
+    print("COMPLETE: downloaded all files in the list")
