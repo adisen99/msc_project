@@ -12,6 +12,7 @@ Code, functions and notebooks used for my Masters Project/Thesis.
 
 ### TODO -
 
+- [ ] Implement quantile regression as an alternative regressor and compare the time and results with the binning method. Link to the technique - [click here](https://www.statology.org/quantile-regression-in-python/)
 - [ ] Refactor the binning for 3d plotting
 - [x] Get slope and significance of the fit
 - [x] Take the precipitation cutoff using mm/day rather than mm/hr i.e. use a forward/backward running sum. (Ask- should I use precipitation daily rate for the bining or use `mm/hr` for binning and keep `mm/day` values only for selecting the cut-off)
