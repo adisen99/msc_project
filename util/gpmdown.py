@@ -21,7 +21,7 @@ def download_url(url):
         print("downloaded and saved : " + fname)
         return url
 
-def down(link_list ):
+def down(link_list):
     # Get the urls from the txt file as a list using readline
     file1 = open(link_list, 'r')
     Lines = file1.readlines()
@@ -36,7 +36,8 @@ def down(link_list ):
     # Run 5 multiple threads. Each call will take the next element in urls list
     results = ThreadPool(5).imap_unordered(download_url, urls)
     for r in results:
-        print(r)
+        # print(r)
+        pass
 
     print("COMPLETE: downloaded all files in the list")
 

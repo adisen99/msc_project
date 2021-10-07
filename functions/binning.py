@@ -28,22 +28,6 @@ def get_res(x, y):
 
     return slope, p
 
-def get_slope(x, y):
-    # if np.isnan(np.sum(y)):
-    #     slope, intercept, r, p, se = stats.linregress(x, y)
-    # else:
-    slope, _, _, _, _ = stats.linregress(x, y)
-
-    return slope
-
-def get_pval(x, y):
-    # if np.isnan(np.sum(y)):
-    #     slope, intercept, r, p, se = stats.linregress(x, y)
-    # else:
-    _, _, _, p, _ = stats.linregress(x, y)
-
-    return p
-
 #-----------------------------------------------------#
 
 # Using function
