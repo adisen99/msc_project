@@ -23,9 +23,9 @@ def download_url(url):
         print("downloaded and saved : " + fname)
         return url
 
-def down(link_list):
+def down(year):
     # Get the urls from the txt file as a list using readline
-    file1 = open(link_list, 'r')
+    file1 = open("../text_files/" + year + ".txt", 'r')
     Lines = file1.readlines()
 
     urls = []
