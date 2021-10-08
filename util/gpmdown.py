@@ -13,7 +13,9 @@ def download_url(url):
     fname = url[file_name_start_pos:file_name_end_pos]
 
     if not os.path.exists(fname):
-        r = requests.get(url, stream=True, allow_redirects=True)
+        s = requests.Session()
+        s.max_redirects = 60
+        r = s.get(url, stream=True, allow_redirects=True)
         if r.status_code == requests.codes.ok:
           with open(fname, 'wb') as f:
             for data in r:
