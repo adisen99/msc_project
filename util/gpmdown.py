@@ -3,6 +3,16 @@
 import requests
 from multiprocessing.pool import ThreadPool
 import os
+import time
+
+headers = {
+    'Accept-Encoding': 'gzip',
+    'Accept-Language': 'en-US,en;q=0.5',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.06',
+    'Accept': 'application/json, text/javascript, */*; q=0.01',
+    'Cache-Control': 'max-age=0',
+    'Connection': 'Keep-Alive',
+}
 
 def download_url(url):
     # print("downloading: ", url)
@@ -14,13 +24,14 @@ def download_url(url):
 
     if not os.path.exists(fname):
         s = requests.Session()
-        s.max_redirects = 60
-        r = s.get(url, stream=True, allow_redirects=True)
+        s.max_redirects = 80
+        r = s.get(url, stream=False, allow_redirects=True, headers = headers)
         if r.status_code == requests.codes.ok:
           with open(fname, 'wb') as f:
             for data in r:
               f.write(data)
         print("downloaded and saved : " + fname)
+        time.sleep(30)
         return url
 
 def down(year):
@@ -36,7 +47,7 @@ def down(year):
         urls.append(line.strip())
 
     # Run 5 multiple threads. Each call will take the next element in urls list
-    results = ThreadPool(5).imap_unordered(download_url, urls)
+    results = ThreadPool(20).imap_unordered(download_url, urls)
     for r in results:
         # print(r)
         pass
