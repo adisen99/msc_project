@@ -3,7 +3,7 @@
 import requests
 from multiprocessing.pool import ThreadPool
 import os
-import time
+# import time
 
 headers = {
     'Accept-Encoding': 'gzip',
@@ -31,7 +31,7 @@ def download_url(url):
             for data in r:
               f.write(data)
         print("downloaded and saved : " + fname)
-        time.sleep(30)
+        # time.sleep(5)
         return url
 
 def down(year):
@@ -47,7 +47,7 @@ def down(year):
         urls.append(line.strip())
 
     # Run 5 multiple threads. Each call will take the next element in urls list
-    results = ThreadPool(20).imap_unordered(download_url, urls)
+    results = ThreadPool(8).imap_unordered(download_url, urls)
     for r in results:
         # print(r)
         pass
@@ -59,9 +59,9 @@ def down(year):
 # import requests
 # import os
 
-# def down(link_list):
+# def down(year):
 #     # Get the urls from the txt file as a list using readline
-#     file1 = open(link_list, 'r')
+#     file1 = open("../text_files/" + year + ".txt", 'r')
 #     Lines = file1.readlines()
 
 #     urls = []
