@@ -25,13 +25,13 @@ def download_url(url):
     if not os.path.exists(fname):
         s = requests.Session()
         s.max_redirects = 80
-        r = s.get(url, stream=False, allow_redirects=True, headers = headers)
+        r = s.get(url, stream=False, allow_redirects=True, headers = headers, timeout = 1000)
         if r.status_code == requests.codes.ok:
           with open(fname, 'wb') as f:
             for data in r:
               f.write(data)
         print("downloaded and saved : " + fname)
-        time.sleep(10)
+        time.sleep(5)
         return url
 
 def down(year):
@@ -47,7 +47,7 @@ def down(year):
         urls.append(line.strip())
 
     # Run 5 multiple threads. Each call will take the next element in urls list
-    results = ThreadPool(21).imap_unordered(download_url, urls)
+    results = ThreadPool(25).imap_unordered(download_url, urls)
     for r in results:
         # print(r)
         pass
