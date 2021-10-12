@@ -14,6 +14,9 @@ headers = {
     'Connection': 'Keep-Alive',
 }
 
+username = "adisen99"
+passwd = "Sai@baba99"
+
 def download_url(url):
     # print("downloading: ", url)
     # assumes that the last segment after the / represents the file name
@@ -25,13 +28,13 @@ def download_url(url):
     if not os.path.exists(fname):
         s = requests.Session()
         s.max_redirects = 80
-        r = s.get(url, stream=False, allow_redirects=True, headers = headers, timeout = 1000)
+        r = s.get(url, stream=False, allow_redirects=True, headers = headers, timeout = 3000, auth = (username, passwd))
         if r.status_code == requests.codes.ok:
           with open(fname, 'wb') as f:
             for data in r:
               f.write(data)
         print("downloaded and saved : " + fname)
-        time.sleep(5)
+        time.sleep(10)
         return url
 
 def down(year):
@@ -47,7 +50,7 @@ def down(year):
         urls.append(line.strip())
 
     # Run 5 multiple threads. Each call will take the next element in urls list
-    results = ThreadPool(25).imap_unordered(download_url, urls)
+    results = ThreadPool(30).imap_unordered(download_url, urls)
     for r in results:
         # print(r)
         pass
