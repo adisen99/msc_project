@@ -69,9 +69,6 @@
 import requests
 import os
 
-username = "adisen99"
-passwd = "Generic_Passw0rd"
-
 def down(year):
     # Get the urls from the txt file as a list using readline
     file1 = open("../text_files/" + year + ".txt", 'r')
@@ -91,7 +88,7 @@ def down(year):
         fname = url[file_name_start_pos:file_name_end_pos]
 
         if not os.path.exists(fname):
-            result = requests.get(url, auth=(username, passwd))
+            result = requests.get(url)
             try:
                result.raise_for_status()
                f = open(fname,'wb')
