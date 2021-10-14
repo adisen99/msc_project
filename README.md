@@ -12,7 +12,7 @@ Code, functions and notebooks used for my Masters Project/Thesis.
 
 ### TODO -
 
-- [ ] Implement quantile regression as an alternative regressor and compare the time and results with the binning method. Link to the technique - click [here](https://www.statology.org/quantile-regression-in-python/) and [here](https://subramgo.github.io/2017/03/13/Quantile-Regression/)
+- [ ] Implement quantile regression as an alternative regressor and compare the time and results with the binning method. Link to the technique - click [here](https://www.statology.org/quantile-regression-in-python/) and [here](https://subramgo.github.io/2017/03/13/Quantile-Regression/) or using SKlearn.
 - [ ] Refactor the binning for 3d plotting
 - [x] Fix the stippling for the plots - CHECK THIS link - https://stackoverflow.com/questions/46803626/fix-location-of-stippling-for-subplots
 - [x] Get slope and significance of the fit
