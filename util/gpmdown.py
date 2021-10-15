@@ -36,7 +36,7 @@ def download_url(url):
         s.mount('http://', adapter)
         s.mount('https://', adapter)
         s.max_redirects = 100
-        r = s.get(url, stream=False, allow_redirects=True, headers = headers, timeout = 1000, auth = (username, passwd))
+        r = s.get(url, stream=False, allow_redirects=True, headers = headers, timeout = 3000, auth = (username, passwd))
         if r.status_code == requests.codes.ok:
           with open(fname, 'wb') as f:
             for data in r:
