@@ -36,14 +36,13 @@ def plot(ds, binned_ds, bin_var, temparr, preciparr1, preciparr2, fit = True, **
     # Make the figure
     if fit == True:
         # get the slope and intercept of the data to be plotted
-        slope, _, _, p, _ = stats.linregress(mids, np.log(binned_ds.precipitationCal))
-        _, intercept = np.polyfit(mids, binned_ds.precipitationCal, 1)
+        slope, intercept, _, p, _ = stats.linregress(mids, np.log(binned_ds.precipitationCal))
         # start plotting
         plt.semilogy(mids, binned_ds.precipitationCal, **kwargs)
         # binned_ds.precipitationCal.plot(**kwargs)
         plt.semilogy(temparr, preciparr1, 'k--', alpha = 0.3)
         plt.semilogy(temparr, preciparr2, 'k--', alpha = 0.3)
-        plt.semilogy(mids, slope*mids + intercept, color = 'k', ls = '-', alpha = 0.8, label = f'C-C scale = {np.round(100*(np.exp(slope) - 1), 3)}; p-value = {np.round(p,3)}')
+        plt.plot(mids, slope*mids + intercept, color = 'k', ls = '-', alpha = 0.8, label = f'C-C scale = {np.round(100*(np.exp(slope) - 1), 3)}; p-value = {np.round(p,3)}')
         plt.xlim(mids.min() - 1, mids.max() + 1)
         plt.yticks([1, 10, 100])
         plt.legend(frameon = False)

@@ -1,7 +1,9 @@
 # msc_project
 Code, functions and notebooks used for my Masters Project/Thesis.
 
-### Some usefule  resources for data binning technique -
+### Some useful resources for -
+
+#### data binning technique 
 
 - http://xarray.pydata.org/en/stable/user-guide/reshaping.html?highlight=stack#stack-and-unstack [READ THIS for refactoring]
 - https://groups.google.com/g/xarray/c/fz7HHgpgwk0/m/h0umDBIHAAAJ [related to the link above]
@@ -9,6 +11,12 @@ Code, functions and notebooks used for my Masters Project/Thesis.
 - https://www.saedsayad.com/unsupervised_binning.htm
 - https://www.statology.org/equal-frequency-binning-python/
 - https://stackoverflow.com/questions/56485160/xarray-equivalent-of-pandas-qcut-function
+
+#### Miscellaneous -
+
+- https://scitools.org.uk/cartopy/docs/latest/gallery/lines_and_polygons/features.html?highlight=cfeatures#sphx-glr-download-gallery-lines-and-polygons-features-py (Cartopy features and coastlines)
+- https://stats.stackexchange.com/questions/129200/r-squared-in-quantile-regression (**Local measure of goodness for quantreg**)
+- https://towardsdatascience.com/calculating-confidence-interval-with-bootstrapping-872c657c058d (Bootstrap confidence interval calculation)
 
 ### TODO -
 
