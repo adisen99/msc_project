@@ -7,12 +7,16 @@ from tqdm import tqdm
 import os
 
 # after renaming the files nad moving to new directory
-with os.scandir('../data/GPM_ncdata') as it:
-    for entry in tqdm(it):
-        if entry.name.endswith('.nc') and entry.is_file():
-            data = nc.open_data(entry.path)
-            data.to_latlon(lon = [50, 95], lat = [5, 40], res = [0.25, 0.25])
-            data.to_nc('../data/GPM_lowres_data' + entry.name)
+def main(year):
+    with os.scandir('../data/GPM_data/gpm_' + year) as it:
+        for entry in tqdm(it):
+            if entry.name.endswith('.nc4') and entry.is_file():
+                data = nc.open_data(entry.path)
+                data.to_latlon(lon = [60, 100], lat = [0, 40], res = [0.25, 0.25])
+                data.to_nc('../data/GPM_lowres_data/gpm_' + year + '/' + entry.name)
+
+if __name__ == "__main__":
+    main("2000")
 
 ####### Old code ###########
 
