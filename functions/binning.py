@@ -24,9 +24,9 @@ def get_res(x, y):
     # if np.isnan(np.sum(y)):
     #     slope, intercept, r, p, se = stats.linregress(x, y)
     # else:
-    slope, _, _, p, _ = stats.linregress(x, y)
+    slope, _, r, _, _ = stats.linregress(x, y)
 
-    return slope, p
+    return slope, r
 
 #-----------------------------------------------------#
 
@@ -67,21 +67,21 @@ def get_binned_3d(ds, percentile_val = 0.99, bin_nr = 12):
             y_t2m = ds.isel(lat = lat, lon = lon).groupby_bins(ds['t2m'].isel(lat = lat, lon = lon), bins_t2m[:, lat, lon]).quantile(percentile_val, interpolation='midpoint')
             y_d2m = ds.isel(lat = lat, lon = lon).groupby_bins(ds['d2m'].isel(lat = lat, lon = lon), bins_d2m[:, lat, lon]).quantile(percentile_val, interpolation='midpoint')
 
-            slope_t2m, p_t2m = get_res(mids_t2m[:, lat, lon], y_t2m.precipitationCal.to_numpy())
-            slope_d2m, p_d2m = get_res(mids_d2m[:, lat, lon], y_d2m.precipitationCal.to_numpy())
+            slope_t2m, r_t2m = get_res(mids_t2m[:, lat, lon], y_t2m.precipitationCal.to_numpy())
+            slope_d2m, r_d2m = get_res(mids_d2m[:, lat, lon], y_d2m.precipitationCal.to_numpy())
 
             binned_ds_t2m[lat, lon] = binned_ds_t2m[lat, lon] + slope_t2m
-            binned_ds_sig_t2m[lat, lon] = binned_ds_sig_t2m[lat, lon] + p_t2m
+            binned_ds_sig_t2m[lat, lon] = binned_ds_sig_t2m[lat, lon] + r_t2m
 
             binned_ds_d2m[lat, lon] = binned_ds_d2m[lat, lon] + slope_d2m
-            binned_ds_sig_d2m[lat, lon] = binned_ds_sig_d2m[lat, lon] + p_d2m
+            binned_ds_sig_d2m[lat, lon] = binned_ds_sig_d2m[lat, lon] + r_d2m
 
     ccscale_t2m_slope = xr.DataArray(binned_ds_t2m, dims=("lat", "lon"), coords={"lat": ds.coords['lat'], "lon": ds.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
 
-    ccscale_t2m_p = xr.DataArray(binned_ds_sig_t2m, dims=("lat", "lon"), coords={"lat": ds.coords['lat'], "lon": ds.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
+    ccscale_t2m_r = xr.DataArray(binned_ds_sig_t2m, dims=("lat", "lon"), coords={"lat": ds.coords['lat'], "lon": ds.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
 
     ccscale_d2m_slope = xr.DataArray(binned_ds_d2m, dims=("lat", "lon"), coords={"lat": ds.coords['lat'], "lon": ds.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
 
-    ccscale_d2m_p = xr.DataArray(binned_ds_sig_d2m, dims=("lat", "lon"), coords={"lat": ds.coords['lat'], "lon": ds.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
+    ccscale_d2m_r = xr.DataArray(binned_ds_sig_d2m, dims=("lat", "lon"), coords={"lat": ds.coords['lat'], "lon": ds.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
 
-    return ccscale_t2m_slope, ccscale_t2m_p, ccscale_d2m_slope, ccscale_d2m_p
+    return ccscale_t2m_slope, ccscale_t2m_r, ccscale_d2m_slope, ccscale_d2m_r
