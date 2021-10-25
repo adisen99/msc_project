@@ -24,7 +24,7 @@ def get_res(x, y):
     # if np.isnan(np.sum(y)):
     #     slope, intercept, r, p, se = stats.linregress(x, y)
     # else:
-    slope, _, r, _, _ = stats.linregress(x, y)
+    slope, _, r, _, _ = stats.linregress(x, np.log(y))
 
     return slope, r
 
