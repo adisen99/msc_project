@@ -9,16 +9,16 @@ import os
 nc.deep_clean()
 
 # after renaming the files nad moving to new directory
-def main(year):
-    with os.scandir('../data/GPM_data/gpm_' + year) as it:
+def main():
+    with os.scandir('../data/GPM_data/') as it:
         for entry in tqdm(it):
-            if entry.name.endswith('.nc4') and entry.is_file() and not os.path.exists('../data/GPM_lowres_data/gpm_' + year + '/' + entry.name):
+            if entry.name.endswith('.nc4') and entry.is_file():
                 data = nc.open_data(entry.path)
                 data.to_latlon(lon = [60, 100], lat = [0, 40], res = [0.25, 0.25])
-                data.to_nc('../data/GPM_lowres_data/gpm_' + year + '/' + entry.name)
+                data.to_nc('../data/GPM_lowres_data/' + entry.name)
 
 if __name__ == "__main__":
-    main("2002")
+    main()
 
 ####### Old code ###########
 
