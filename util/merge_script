@@ -2,67 +2,146 @@
 
 echo "Starting merge process for year {$1} ..."
 
-echo "Merging for Jan ..."
-cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"01*.nc4 gpm_"$1"_01.nc4 > /dev/null
-echo "Finished Merging for Jan ..."
-sleep 15
+while getopts "amy" OPTION
+do
+    case $OPTION in
+        a)
+            echo "Merging for Jan ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"01*.nc4 gpm_"$1"_01.nc4 2> /dev/null
+            echo "Finished Merging for Jan ..."
+            sleep 15
 
-echo "Merging for Feb ..."
-cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"02*.nc4 gpm_"$1"_02.nc4 > /dev/null
-echo "Finished Merging for Feb ..."
-sleep 15
+            echo "Merging for Feb ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"02*.nc4 gpm_"$1"_02.nc4 2> /dev/null
+            echo "Finished Merging for Feb ..."
+            sleep 15
 
-echo "Merging for Mar ..."
-cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"03*.nc4 gpm_"$1"_03.nc4 > /dev/null
-echo "Finished Merging for Mar ..."
-sleep 15
+            echo "Merging for Mar ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"03*.nc4 gpm_"$1"_03.nc4 2> /dev/null
+            echo "Finished Merging for Mar ..."
+            sleep 15
+            
+            echo "Merging for Apr ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"04*.nc4 gpm_"$1"_04.nc4 2> /dev/null
+            echo "Finished Merging for Apr ..."
+            sleep 15
+            
+            echo "Merging for May ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"05*.nc4 gpm_"$1"_05.nc4 2> /dev/null
+            echo "Finished Merging for May ..."
+            sleep 15
+            
+            echo "Merging for Jun ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"06*.nc4 gpm_"$1"_06.nc4 2> /dev/null
+            echo "Finished Merging for Jun ..."
+            sleep 15
 
-echo "Merging for Apr ..."
-cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"04*.nc4 gpm_"$1"_04.nc4 > /dev/null
-echo "Finished Merging for Apr ..."
-sleep 15
+            echo "Merging for Jul ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"07*.nc4 gpm_"$1"_07.nc4 2>/dev/null
+            echo "Finished Merging for Jul ..."
+            sleep 15
 
-echo "Merging for May ..."
-cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"05*.nc4 gpm_"$1"_05.nc4 > /dev/null
-echo "Finished Merging for May ..."
-sleep 15
+            echo "Merging for Aug ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"08*.nc4 gpm_"$1"_08.nc4 2> /dev/null
+            echo "Finished Merging for Aug ..."
+            sleep 15
 
-echo "Merging for Jun ..."
-cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"06*.nc4 gpm_"$1"_06.nc4 > /dev/null
-echo "Finished Merging for Jun ..."
-sleep 15
+            echo "Merging for Sept ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"09*.nc4 gpm_"$1"_09.nc4 2> /dev/null
+            echo "Finished Merging for Sept ..."
+            sleep 15
 
-echo "Merging for Jul ..."
-cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"07*.nc4 gpm_"$1"_07.nc4 > /dev/null
-echo "Finished Merging for Jul ..."
-sleep 15
+            echo "Merging for Oct ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"10*.nc4 gpm_"$1"_10.nc4 2> /dev/null
+            echo "Finished Merging for Oct ..."
+            sleep 15
 
-echo "Merging for Aug ..."
-cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"08*.nc4 gpm_"$1"_08.nc4 > /dev/null
-echo "Finished Merging for Aug ..."
-sleep 15
+            echo "Merging for Nov ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"11*.nc4 gpm_"$1"_11.nc4 2> /dev/null
+            echo "Finished Merging for Nov ..."
+            sleep 15
 
-echo "Merging for Sept ..."
-cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"09*.nc4 gpm_"$1"_09.nc4 > /dev/null
-echo "Finished Merging for Sept ..."
-sleep 15
+            echo "Merging for Dec ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"12*.nc4 gpm_"$1"_12.nc4 2> /dev/null
+            echo "Finished Merging for Dec ..."
+            sleep 20
 
-echo "Merging for Oct ..."
-cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"10*.nc4 gpm_"$1"_10.nc4 > /dev/null
-echo "Finished Merging for Oct ..."
-sleep 15
+            echo "Now Merging for All months ..."
+            cdo mergetime gpm_"$1"_*.nc4 gpm_"$1".nc
 
-echo "Merging for Nov ..."
-cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"11*.nc4 gpm_"$1"_11.nc4 > /dev/null
-echo "Finished Merging for Nov ..."
-sleep 15
+            echo "Finished the merging process"
+            exit
+            ;;
 
-echo "Merging for Dec ..."
-cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"12*.nc4 gpm_"$1"_12.nc4 > /dev/null
-echo "Finished Merging for Dec ..."
-sleep 20
+        m)
+            echo "Merging for Jan ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"01*.nc4 gpm_"$1"_01.nc4 2> /dev/null
+            echo "Finished Merging for Jan ..."
+            sleep 15
 
-echo "Now Merging for All months ..."
-cdo mergetime gpm_"$1"_*.nc4 gpm_"$1".nc
+            echo "Merging for Feb ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"02*.nc4 gpm_"$1"_02.nc4 2> /dev/null
+            echo "Finished Merging for Feb ..."
+            sleep 15
 
-echo "Finished the merging process"
+            echo "Merging for Mar ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"03*.nc4 gpm_"$1"_03.nc4 2> /dev/null
+            echo "Finished Merging for Mar ..."
+            sleep 15
+
+            echo "Merging for Apr ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"04*.nc4 gpm_"$1"_04.nc4 2> /dev/null
+            echo "Finished Merging for Apr ..."
+            sleep 15
+
+            echo "Merging for May ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"05*.nc4 gpm_"$1"_05.nc4 2> /dev/null
+            echo "Finished Merging for May ..."
+            sleep 15
+
+            echo "Merging for Jun ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"06*.nc4 gpm_"$1"_06.nc4 2> /dev/null
+            echo "Finished Merging for Jun ..."
+            sleep 15
+
+            echo "Merging for Jul ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"07*.nc4 gpm_"$1"_07.nc4 2>/dev/null
+            echo "Finished Merging for Jul ..."
+            sleep 15
+
+            echo "Merging for Aug ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"08*.nc4 gpm_"$1"_08.nc4 2> /dev/null
+            echo "Finished Merging for Aug ..."
+            sleep 15
+
+            echo "Merging for Sept ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"09*.nc4 gpm_"$1"_09.nc4 2> /dev/null
+            echo "Finished Merging for Sept ..."
+            sleep 15
+
+            echo "Merging for Oct ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"10*.nc4 gpm_"$1"_10.nc4 2> /dev/null
+            echo "Finished Merging for Oct ..."
+            sleep 15
+
+            echo "Merging for Nov ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"11*.nc4 gpm_"$1"_11.nc4 2> /dev/null
+            echo "Finished Merging for Nov ..."
+            sleep 15
+
+            echo "Merging for Dec ..."
+            cdo mergetime 3B-HHR.MS.MRG.3IMERG."$1"12*.nc4 gpm_"$1"_12.nc4 2> /dev/null
+            echo "Finished Merging for Dec ..."
+
+            echo "Finished the merging process"
+            exit
+            ;;
+        y)
+            echo "Now Merging for All months ..."
+            cdo mergetime gpm_"$1"_*.nc4 gpm_"$1".nc
+
+            echo "Finished the merging process"
+            exit
+            ;;
+    esac
+done
