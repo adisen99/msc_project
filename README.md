@@ -24,14 +24,25 @@ Code, functions and notebooks used for my Masters Project/Thesis.
 
 ### TODO -
 
+- Implementation of Dynamic and Thermodynamic Effects
+
 - [ ] Figure out the use of finding Block maxima and Climate change Indices - Resources -
-        - https://search.brave.com/search?q=calculate+block+maxima+python&source=desktop
-        - https://pypi.org/project/evt/
-        - https://kikocorreoso.github.io/scikit-extremes/index.html
-        - http://etccdi.pacificclimate.org/list_27_indices.shtml
-        - https://search.brave.com/search?q=calculation+of+climate+change+indices&source=desktop
+        1. https://search.brave.com/search?q=calculate+block+maxima+python&source=desktop
+
+        2. https://pypi.org/project/evt/
+
+        3. https://kikocorreoso.github.io/scikit-extremes/index.html
+
+        4. http://etccdi.pacificclimate.org/list_27_indices.shtml
+
+        5. https://search.brave.com/search?q=calculation+of+climate+change+indices&source=desktop
+
 - [ ] Implement quantile regression as an alternative regressor and compare the time and results with the binning method. Link to the technique - click [here](https://www.statology.org/quantile-regression-in-python/) and [here](https://subramgo.github.io/2017/03/13/Quantile-Regression/) or using SKlearn.
+
 - [ ] Refactor the binning for 3d plotting
+
 - [x] Fix the stippling for the plots - CHECK THIS link - https://stackoverflow.com/questions/46803626/fix-location-of-stippling-for-subplots
+
 - [x] Get slope and significance of the fit
+
 - [x] Take the precipitation cutoff using mm/day rather than mm/hr i.e. use a forward/backward running sum. (Ask- should I use precipitation daily rate for the bining or use `mm/hr` for binning and keep `mm/day` values only for selecting the cut-off)
