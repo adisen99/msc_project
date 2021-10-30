@@ -24,7 +24,7 @@ Code, functions and notebooks used for my Masters Project/Thesis.
 
 ### TODO -
 
-- Implementation of Dynamic and Thermodynamic Effects
+- [ ] Implementation of Dynamic and Thermodynamic Effects
 
 - [ ] Figure out the use of finding Block maxima and Climate change Indices - Resources -'
   https://search.brave.com/search?q=calculate+block+maxima+python&source=desktop
