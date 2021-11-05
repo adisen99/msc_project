@@ -33,7 +33,7 @@ def get_res(x, y):
 # Using function
 
 # get binned data
-def get_binned(ds, percentile_val = 0.99, var = "t2m", bins = None, bin_nr = 12):
+def get_binned(ds, percentile_val = 0.99, var = "t2m", bins = None, bin_nr = 24):
     if bins == None:
         #create histogram with equal-frequency bins
         # n, bins, patches = plt.hist(ds[var], equalObs(ds[var], bin_nr))
