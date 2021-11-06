@@ -1,6 +1,6 @@
 # Regridding using ncotoolkit (CDO installed)
 #
-# Make sure to run naming.sh program to change *.nc4 files to *.nc
+# This is the old regrrid script using python-cdo
 
 import nctoolkit as nc
 import time
