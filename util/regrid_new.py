@@ -34,7 +34,7 @@ def main():
                     'lon': (['lon'], np.arange(60, 100.25, 0.25)),
                     }
                 )
-                regridder = xe.Regridder(ds, ds_out, 'bilinear')
+                regridder = xe.Regridder(ds, ds_out, 'conservative') # the recommended method of regridding is conservative
 
                 print("Data has been successfully prepared for regridding ...")
 

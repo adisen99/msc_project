@@ -24,6 +24,8 @@ Code, functions and notebooks used for my Masters Project/Thesis.
 
 ### TODO -
 
+- [ ] URGENT - Repeat the regridding using the `conservative` method which is recommended for upscaling using `xesmf`
+
 - [ ] Implementation of Dynamic and Thermodynamic Effects
 
 - [ ] Figure out the use of finding Block maxima and Climate change Indices - Resources -'
