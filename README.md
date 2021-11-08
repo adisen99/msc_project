@@ -24,8 +24,6 @@ Code, functions and notebooks used for my Masters Project/Thesis.
 
 ### TODO -
 
-- [ ] URGENT - Repeat the regridding using the `conservative` method which is recommended for upscaling using `xesmf`
-
 - [ ] Implementation of Dynamic and Thermodynamic Effects
 
 - [ ] Figure out the use of finding Block maxima and Climate change Indices - Resources -'
@@ -38,6 +36,8 @@ Code, functions and notebooks used for my Masters Project/Thesis.
 - [ ] Implement quantile regression as an alternative regressor and compare the time and results with the binning method. Link to the technique - click [here](https://www.statology.org/quantile-regression-in-python/) and [here](https://subramgo.github.io/2017/03/13/Quantile-Regression/) or using SKlearn.
 
 - [ ] Refactor the binning for 3d plotting
+
+- [x] Repeat the regridding using the `conservative` method which is recommended for upscaling using `xesmf` - The `conservative` method is not working so sticking to the `bilinear` method. The difference of the output is quite low.
 
 - [x] Fix the stippling for the plots - CHECK THIS link - https://stackoverflow.com/questions/46803626/fix-location-of-stippling-for-subplots
 
