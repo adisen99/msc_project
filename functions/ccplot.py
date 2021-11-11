@@ -23,7 +23,7 @@ def get_ideal_data(da, p11_inital_val, p12_initial_value, time_scale=1):
     return temparr, preciparr1, preciparr2
 
 # The main plot function
-def plot(ds, binned_ds, bin_var, temparr, preciparr1, preciparr2, preciparr3, preciparr4, fit = True, **kwargs):
+def plot(binned_ds, bin_var, temparr, preciparr1, preciparr2, preciparr3, preciparr4, fit = True, **kwargs):
     # get the mid points of the temperature bins
     bin_mids = []
     bin_array = binned_ds.coords[bin_var].to_numpy()
@@ -34,13 +34,18 @@ def plot(ds, binned_ds, bin_var, temparr, preciparr1, preciparr2, preciparr3, pr
 
     mids = np.array(bin_mids)
 
+    precip = binned_ds.precipitationCal.to_numpy()
+
+    idx = np.argwhere(np.isnan(precip))
+    precip = np.delete(precip, idx)
+    mids = np.delete(mids, idx)
+
     # Make the figure
     if fit == True:
         # get the slope and intercept of the data to be plotted
-        slope, intercept, r, _, _ = stats.linregress(mids, np.log(binned_ds.precipitationCal))
+        slope, intercept, r, _, _ = stats.linregress(mids, np.log(precip))
         # start plotting
-        plt.semilogy(mids, binned_ds.precipitationCal, **kwargs)
-        # binned_ds.precipitationCal.plot(**kwargs)
+        plt.semilogy(mids, precip, **kwargs)
         plt.semilogy(temparr, preciparr1, 'k--', alpha = 0.3)
         plt.semilogy(temparr, preciparr2, 'k--', alpha = 0.3)
         plt.semilogy(temparr, preciparr3, 'k:', alpha = 0.3)
@@ -51,10 +56,9 @@ def plot(ds, binned_ds, bin_var, temparr, preciparr1, preciparr2, preciparr3, pr
         plt.legend(frameon = False)
 
     elif fit == False:
-        slope, _, r, _, _ = stats.linregress(mids, np.log(binned_ds.precipitationCal))
+        slope, _, r, _, _ = stats.linregress(mids, np.log(precip))
         # start plotting
-        plt.semilogy(mids, binned_ds.precipitationCal, label = f'C-C scale = {np.round(100*(np.exp(slope) - 1), 3)}; $R^2$ = {np.round(r,3)}', **kwargs)
-        # binned_ds.precipitationCal.plot(**kwargs)
+        plt.semilogy(mids, precip, label = f'C-C scale = {np.round(100*(np.exp(slope) - 1), 3)}; $R^2$ = {np.round(r,3)}', **kwargs)
         plt.semilogy(temparr, preciparr1, 'k--', alpha = 0.3)
         plt.semilogy(temparr, preciparr2, 'k--', alpha = 0.3)
         plt.semilogy(temparr, preciparr3, 'k:', alpha = 0.3)

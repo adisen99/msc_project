@@ -2,9 +2,11 @@
 
 import numpy as np
 import xarray as xr
-import dask
-from dask.diagnostics import ProgressBar
 import time
+import dask
+import dask.array as da
+from dask.distributed import Client
+from dask.diagnostics import ProgressBar
 
 # the main function to run
 def main():
@@ -21,7 +23,7 @@ def main():
     precip.unify_chunks()
     print("done resampling ...")
     time.sleep(1)
-    
+
     print("Importing era data ...")
     mfdata_DIR2 = '../data/test/era*.nc'
     era = xr.open_mfdataset(mfdata_DIR2, chunks=dict(time=10000, lat=40, lon=40), engine='netcdf4', combine='nested', concat_dim='time', parallel=True)

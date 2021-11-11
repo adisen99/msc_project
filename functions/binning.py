@@ -67,8 +67,20 @@ def get_binned_3d(ds, percentile_val = 0.99, bin_nr = 12):
             y_t2m = ds.isel(lat = lat, lon = lon).groupby_bins(ds['t2m'].isel(lat = lat, lon = lon), bins_t2m[:, lat, lon]).quantile(percentile_val, interpolation='midpoint')
             y_d2m = ds.isel(lat = lat, lon = lon).groupby_bins(ds['d2m'].isel(lat = lat, lon = lon), bins_d2m[:, lat, lon]).quantile(percentile_val, interpolation='midpoint')
 
-            slope_t2m, r_t2m = get_res(mids_t2m[:, lat, lon], y_t2m.precipitationCal.to_numpy())
-            slope_d2m, r_d2m = get_res(mids_d2m[:, lat, lon], y_d2m.precipitationCal.to_numpy())
+            precip_t2m = y_t2m.precipitationCal.to_numpy()
+            precip_d2m = y_d2m.precipitationCal.to_numpy()
+
+            idx_t2m = np.argwhere(np.isnan(precip_t2m))
+            idx_d2m = np.argwhere(np.isnan(precip_d2m))
+
+            precip_t2m = np.delete(precip_t2m, idx_t2m)
+            precip_d2m = np.delete(precip_d2m, idx_d2m)
+
+            mids_t2m = np.delete(mids_t2m, idx_t2m)
+            mids_d2m = np.delete(mids_d2m, idx_d2m)
+
+            slope_t2m, r_t2m = get_res(mids_t2m[:, lat, lon], precip_t2m)
+            slope_d2m, r_d2m = get_res(mids_d2m[:, lat, lon], precip_d2m)
 
             binned_ds_t2m[lat, lon] = binned_ds_t2m[lat, lon] + slope_t2m
             binned_ds_sig_t2m[lat, lon] = binned_ds_sig_t2m[lat, lon] + r_t2m
