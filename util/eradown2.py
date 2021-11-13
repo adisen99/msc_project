@@ -5,8 +5,8 @@ import time
 c = cdsapi.Client()
 
 def down():
-    for year in range(2000,2009):
-        for month in range(1,12):
+    for year in range(2000,2010):
+        for month in range(1,13):
             use_year = str(year)
             if month < 10:
                 use_month = '0' + str(month)

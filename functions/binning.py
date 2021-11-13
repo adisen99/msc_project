@@ -70,14 +70,14 @@ def get_binned_3d(ds, percentile_val = 0.99, bin_nr = 12):
             precip_t2m = y_t2m.precipitationCal.to_numpy()
             precip_d2m = y_d2m.precipitationCal.to_numpy()
 
-            idx_t2m = np.argwhere(np.isnan(precip_t2m))
-            idx_d2m = np.argwhere(np.isnan(precip_d2m))
+            # idx_t2m = np.argwhere(np.isnan(precip_t2m))
+            # idx_d2m = np.argwhere(np.isnan(precip_d2m))
 
-            precip_t2m = np.delete(precip_t2m, idx_t2m)
-            precip_d2m = np.delete(precip_d2m, idx_d2m)
+            # precip_t2m = np.delete(precip_t2m, idx_t2m)
+            # precip_d2m = np.delete(precip_d2m, idx_d2m)
 
-            mids_t2m = np.delete(mids_t2m, idx_t2m)
-            mids_d2m = np.delete(mids_d2m, idx_d2m)
+            # mids_t2m = np.delete(mids_t2m, idx_t2m)
+            # mids_d2m = np.delete(mids_d2m, idx_d2m)
 
             slope_t2m, r_t2m = get_res(mids_t2m[:, lat, lon], precip_t2m)
             slope_d2m, r_d2m = get_res(mids_d2m[:, lat, lon], precip_d2m)

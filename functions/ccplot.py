@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import xarray as xr
 from scipy import stats
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
 
 # Preparation for the ideal C-C scaling background plots
 # TODO - implement another background plot of 2*CC scaling or 1.5*CC scaling
@@ -66,3 +68,32 @@ def plot(binned_ds, bin_var, temparr, preciparr1, preciparr2, preciparr3, precip
         plt.xlim(mids.min() - 0.2, mids.max() + 0.2)
         # plt.yticks([1, 10, 100])
         plt.legend(frameon = False)
+
+# Plotting function for 3d binning plot
+def plot_3d(slope_da, r_da, title, extent_list, **kwargs):
+    """
+    Function to plot the output of binning 3d function
+    -----
+    inputs are -
+    slope_da : datarray containing slope
+    r_da : datarray containing R^2 values for goodness of fit
+    title : The title of the output plot
+    extent_list : [59.9, 100.1, -0.1, 40.1]
+    """
+    ax = plt.axes(projection=ccrs.PlateCarree())
+    ax.set_extent(extent_list, crs=ccrs.PlateCarree())
+    (10**slope_da - 1).plot.contourf(ax = ax, cbar_kwargs={"label":"C-C scale"}, **kwargs)
+    x, y = np.meshgrid(slope_da.coords['lon'], slope_da.coords['lat'])
+    plt.scatter(x[(np.abs(r_da.to_numpy()) > 0.65)],y[(np.abs(r_da.to_numpy()) > 0.65)], marker='o', color = 'k', s=2)
+    gridliner = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True, linewidth=2, color='gray', alpha=0.05, linestyle='--')
+    # ax.coastlines(alpha=0.7)
+    # ax.add_feature(cfeature.BORDERS, alpha=0.7)
+    ax.add_feature(cfeature.COASTLINE, alpha=1.0)
+    gridliner.top_labels = False
+    gridliner.right_labels = False
+    gridliner.ylines = False  # you need False
+    gridliner.xlines = False  # you need False
+    ax.set_title(title)
+    # ax.set_xlabel('Latitude')
+    # ax.set_ylabel('Longitude')
+    # ax.tick_params(axis='both', labelsize=12)
