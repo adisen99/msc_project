@@ -24,9 +24,9 @@ Code, functions and notebooks used for my Masters Project/Thesis.
 
 ### TODO -
 
-- [ ] Fix the binning technique for both 1-D and 3-D plotting.
+- [ ] URGENT : Binning code fix nan error
 
-- [ ] Implement quantile regression as an alternative regressor and compare the time and results with the binning method. Link to the technique - click [here](https://www.statology.org/quantile-regression-in-python/) and [here](https://subramgo.github.io/2017/03/13/Quantile-Regression/) or using SKlearn.
+- [ ] Implement quantile regression as an alternative regressor and also the ZM method from Ali 2018 paper and compare the time and results with the binning method. Link to the technique - click [here](https://www.statology.org/quantile-regression-in-python/) and [here](https://subramgo.github.io/2017/03/13/Quantile-Regression/) or using SKlearn.
 
 - [ ] Implementation of Dynamic and Thermodynamic Effects
 
