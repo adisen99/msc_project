@@ -57,52 +57,6 @@ def plot(binned_precip, mean_temp, temparr, preciparr1, preciparr2, preciparr3, 
         # plt.yticks([1, 10, 100])
         plt.legend(frameon = False)
 
-# --------------------------------------------------------
-# def plot_old(binned_ds, bin_var, temparr, preciparr1, preciparr2, preciparr3, preciparr4, fit = True, **kwargs):
-#     # get the mid points of the temperature bins
-#     bin_mids = []
-#     bin_array = binned_ds.coords[bin_var].to_numpy()
-
-#     for i in range(0, len(bin_array)):
-#         bin_mid = (bin_array[i].left + bin_array[i].right) * 0.5
-#         bin_mids.append(bin_mid)
-
-#     mids = np.array(bin_mids)
-
-#     precip = binned_ds.precipitationCal.to_numpy()
-
-#     idx = np.argwhere(np.isnan(precip))
-#     precip = np.delete(precip, idx)
-#     mids = np.delete(mids, idx)
-
-#     # Make the figure
-#     if fit == True:
-#         # get the slope and intercept of the data to be plotted
-#         slope, intercept, r, _, _ = stats.linregress(mids, np.log(precip))
-#         # start plotting
-#         plt.semilogy(mids, precip, **kwargs)
-#         plt.semilogy(temparr, preciparr1, 'k--', alpha = 0.3)
-#         plt.semilogy(temparr, preciparr2, 'k--', alpha = 0.3)
-#         plt.semilogy(temparr, preciparr3, 'k:', alpha = 0.3)
-#         plt.semilogy(temparr, preciparr4, 'k:', alpha = 0.3)
-#         plt.plot(mids, slope*mids + intercept, color = 'k', ls = '-', alpha = 0.8, label = f'C-C scale = {np.round(100*(np.exp(slope) - 1), 3)}; $R^2$ = {np.round(r,3)}')
-#         plt.xlim(mids.min() - 0.2, mids.max() + 0.2)
-#         # plt.yticks([1, 10, 100])
-#         plt.legend(frameon = False)
-
-#     elif fit == False:
-#         slope, _, r, _, _ = stats.linregress(mids, np.log(precip))
-#         # start plotting
-#         plt.semilogy(mids, precip, label = f'C-C scale = {np.round(100*(np.exp(slope) - 1), 3)}; $R^2$ = {np.round(r,3)}', **kwargs)
-#         plt.semilogy(temparr, preciparr1, 'k--', alpha = 0.3)
-#         plt.semilogy(temparr, preciparr2, 'k--', alpha = 0.3)
-#         plt.semilogy(temparr, preciparr3, 'k:', alpha = 0.3)
-#         plt.semilogy(temparr, preciparr4, 'k:', alpha = 0.3)
-#         plt.xlim(mids.min() - 0.2, mids.max() + 0.2)
-#         # plt.yticks([1, 10, 100])
-#         plt.legend(frameon = False)
-# --------------------------------------------------------
-
 # Plotting function for 3d binning plot
 def plot_3d(slope_da, r_da, title, extent_list, **kwargs):
     """
