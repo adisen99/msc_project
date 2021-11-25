@@ -58,7 +58,7 @@ def plot(binned_precip, mean_temp, temparr, preciparr1, preciparr2, preciparr3, 
         plt.legend(frameon = False)
 
 # Plotting function for 3d binning plot
-def plot_3d(slope_da, r_da, title, extent_list, **kwargs):
+def plot_3d(slope_da, r_da, extent_list, title, threshold_sig=0.95, marker_size=2, **kwargs):
     """
     Function to plot the output of binning 3d function
     -----
@@ -70,9 +70,10 @@ def plot_3d(slope_da, r_da, title, extent_list, **kwargs):
     """
     ax = plt.axes(projection=ccrs.PlateCarree())
     ax.set_extent(extent_list, crs=ccrs.PlateCarree())
-    (10**slope_da - 1).plot.contourf(ax = ax, cbar_kwargs={"label":"C-C scale"}, **kwargs)
+    (100*(np.exp(slope_da) - 1)).plot.contourf(ax = ax, cbar_kwargs={"label":"C-C scale"}, **kwargs)
+    # (100*(np.exp(slope_da) - 1)).plot.pcolormesh(ax = ax, cbar_kwargs={"label":"C-C scale"}, **kwargs)
     x, y = np.meshgrid(slope_da.coords['lon'], slope_da.coords['lat'])
-    plt.scatter(x[(np.abs(r_da.to_numpy()) > 0.65)],y[(np.abs(r_da.to_numpy()) > 0.65)], marker='o', color = 'k', s=2)
+    plt.scatter(x[(np.abs(r_da.to_numpy()) > threshold_sig)],y[(np.abs(r_da.to_numpy()) > threshold_sig)], marker='o', color = 'k', s=marker_size)
     gridliner = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True, linewidth=2, color='gray', alpha=0.05, linestyle='--')
     # ax.coastlines(alpha=0.7)
     # ax.add_feature(cfeature.BORDERS, alpha=0.7)

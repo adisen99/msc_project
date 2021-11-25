@@ -29,6 +29,16 @@ def get_res(x, y):
 
     return slope, r
 
+# def get_quant(x):
+#     return np.quantile(x, 0.99, axis=None, out=None, overwrite_input=False, keepdims=True)
+
+# def binned_statistic(x, y, bins):
+#     xx = stats.binned_statistic(x, x, statistic="mean", bins=bins).statistic
+#     xy = stats.binned_statistic(x, y, statistic=get_quant, bins=bins).statistic
+
+#     slope, r = get_res(xx, xy)
+#     return slope, r
+
 #-----------------------------------------------------#
 
 # Using functions
@@ -88,8 +98,8 @@ def get_binned_3d(precip_da, t2m_da, d2m_da, percentile_val = 0.99, bin_nr = 12)
             # precip_t2m = np.delete(precip_t2m, idx_t2m)
             # precip_d2m = np.delete(precip_d2m, idx_d2m)
 
-            # mids_t2m = np.delete(mids_t2m, idx_t2m)
-            # mids_d2m = np.delete(mids_d2m, idx_d2m)
+            # mean_t2m = np.delete(mean_t2m, idx_t2m)
+            # mean_d2m = np.delete(mean_d2m, idx_d2m)
 
             slope_t2m, r_t2m = get_res(mean_t2m, precip_t2m)
             slope_d2m, r_d2m = get_res(mean_d2m, precip_d2m)
@@ -109,3 +119,22 @@ def get_binned_3d(precip_da, t2m_da, d2m_da, percentile_val = 0.99, bin_nr = 12)
     ccscale_d2m_r = xr.DataArray(binned_ds_sig_d2m, dims=("lat", "lon"), coords={"lat": precip_da.coords['lat'], "lon": precip_da.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
 
     return ccscale_t2m_slope, ccscale_t2m_r, ccscale_d2m_slope, ccscale_d2m_r
+
+# # trying an alternate function for binning
+# def get_binned_3d_alter(precip_da, t2m_da, d2m_da, percentile_val = 0.99, bin_nr = 12):
+#     # convert temperature data to numpy array
+#     t2m = t2m_da.to_numpy()
+#     d2m = d2m_da.to_numpy()
+#     precip = precip_da.to_numpy()
+
+#     # get the equal freq. bins from the temperature data
+#     # bins_t2m = np.apply_along_axis(equalObs, 0, t2m, bin_nr)
+#     # bins_d2m = np.apply_along_axis(equalObs, 0, d2m, bin_nr)
+#     bins_t2m = 20
+#     bins_d2m = 20
+
+#     # do the binning and get the slope and significance dataarrays
+#     ccscale_t2m_slope, ccscale_t2m_r = xr.apply_ufunc(binned_statistic, t2m_da, precip_da, input_core_dims=[["time"], ["time"]], kwargs={"bins":bins_t2m}, keep_attrs=False, dask="allowed")
+#     ccscale_d2m_slope, ccscale_d2m_r = xr.apply_ufunc(binned_statistic, d2m_da, precip_da, input_core_dims=[["time"], ["time"]], kwargs={"bins":bins_d2m}, keep_attrs=False, dask="allowed")
+
+#     return ccscale_t2m_slope, ccscale_t2m_r, ccscale_d2m_slope, ccscale_d2m_r
