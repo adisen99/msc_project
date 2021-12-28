@@ -36,4 +36,5 @@ dask-worker-space/
 # Personel stuff
 data/
 images/
+scratch/
 *.html
