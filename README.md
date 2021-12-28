@@ -24,11 +24,22 @@ Code, functions and notebooks used for my Masters Project/Thesis.
 
 ### TODO -
 
-- [ ] URGENT : Binning code fix nan error
-
-- [ ] Implement quantile regression as an alternative regressor and also the ZM method from Ali 2018 paper and compare the time and results with the binning method. Link to the technique - click [here](https://www.statology.org/quantile-regression-in-python/) and [here](https://subramgo.github.io/2017/03/13/Quantile-Regression/) or using SKlearn.
+#### Priority
 
 - [ ] Implementation of Dynamic and Thermodynamic Effects
+
+- [ ] Inter-annual variability
+
+- [ ] Precip-temp varying plot in regions of dipole behavior
+
+- [ ] Complete winter season binning
+
+- [x] Repeat the regridding using the `conservative` method which is recommended for upscaling using `xesmf` - The `conservative` method is not working so sticking to the `bilinear` method. The difference of the output is quite low.
+
+#### If time available
+
+- [ ] Implement quantile regression as an alternative regressor and also the ZM method from Ali 2018 paper and compare the time and results with the binning method. Link to the technique - click [here](https://www.statology.org/quantile-regression-in-python/) and [here](https://subramgo.github.io/2017/03/13/Quantile-Regression/) or using SKlearn. (NOT DOING)
+
 
 - [ ] Figure out the use of finding Block maxima and Climate change Indices - Resources -'
   https://search.brave.com/search?q=calculate+block+maxima+python&source=desktop
@@ -36,11 +47,3 @@ Code, functions and notebooks used for my Masters Project/Thesis.
   https://kikocorreoso.github.io/scikit-extremes/index.html
   http://etccdi.pacificclimate.org/list_27_indices.shtml
   https://search.brave.com/search?q=calculation+of+climate+change+indices&source=desktop
-
-- [x] Repeat the regridding using the `conservative` method which is recommended for upscaling using `xesmf` - The `conservative` method is not working so sticking to the `bilinear` method. The difference of the output is quite low.
-
-- [x] Fix the stippling for the plots - CHECK THIS link - https://stackoverflow.com/questions/46803626/fix-location-of-stippling-for-subplots
-
-- [x] Get slope and significance of the fit
-
-- [x] Take the precipitation cutoff using mm/day rather than mm/hr i.e. use a forward/backward running sum. (Ask- should I use precipitation daily rate for the bining or use `mm/hr` for binning and keep `mm/day` values only for selecting the cut-off)
