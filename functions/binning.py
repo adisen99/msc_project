@@ -25,12 +25,10 @@ def get_res(x, y):
     # if np.isnan(np.sum(y)):
     #     slope, intercept, r, p, se = stats.linregress(x, y)
     # else:
-    slope, _, r, _, _ = stats.linregress(x, np.log(y))
+    slope, _, _, p, _ = stats.linregress(x, np.log(y))
 
-    return slope, r
+    return slope, p
 
-# def get_quant(x):
-#     return np.quantile(x, 0.99, axis=None, out=None, overwrite_input=False, keepdims=True)
 
 # def binned_statistic(x, y, bins):
 #     xx = stats.binned_statistic(x, x, statistic="mean", bins=bins).statistic
@@ -42,6 +40,8 @@ def get_res(x, y):
 #-----------------------------------------------------#
 
 # Using functions
+
+# ---------- 2d functions ------------
 
 # get binned data
 def get_binned(precip_da, temp_da, percentile_val = 0.99, bins = None, bin_nr = 12):
@@ -58,83 +58,88 @@ def get_binned(precip_da, temp_da, percentile_val = 0.99, bins = None, bin_nr = 
     # return them
     return binned_precip, mean_temp
 
-def get_binned_3d(precip_da, t2m_da, d2m_da, percentile_val = 0.99, bin_nr = 12):
+# def get_binned_alter(precip, temp, percentile_val = 0.99, bins = None, bin_nr = 12):
+#     # Getting the equal frequency bins
+#     if bins == None:
+#         bins = equalObs(temp, bin_nr)
+#     else:
+#         bins = np.array(bins)
 
+#     # group the precipitation data according to the bins of temperature data
+#     binned_precip = precip.groupby_bins(temp, bins, include_lowest=True, precision=10).quantile(percentile_val, interpolation = 'midpoint')
+#     # group the temperature data by temperature bins and take mean of each bin
+#     mean_temp = temp.groupby_bins(temp, bins, include_lowest=True, precision=10).mean(dim="time")
+#     # return them
+#     return binned_precip, mean_temp
+
+# ---------- 3d function ------------
+
+def get_binned_3d(precip_da, t2m_da, d2m_da, bin_nr = 12):
+    """
+    Binning function to get a 3-d map of slope and p-values of the regression
+    between 95th / 50th percentiles of precipitation and mean temperature of each bin
+    ______________________
+    Input:
+        precip_da : precipitation data-array loaded in memory
+        t2m_da : SAT data-array loaded in memory
+        d2m_da : DPT data-array loaded in memory
+        bin_nr : number of bins to make (does't have a signigicant difference in the slope
+                does make a difference in the p-value)
+    ______________________
+    """
+    print("Starting the binning process ...")
+
+    print("converting data-arrays to numpy arrays ...")
     # convert temperature data to numpy array
     t2m = t2m_da.to_numpy()
     d2m = d2m_da.to_numpy()
     precip = precip_da.to_numpy()
 
-    # get the equal freq. bins from the temperature data
-    bins_t2m = np.apply_along_axis(equalObs, 0, t2m, bin_nr)
-    bins_d2m = np.apply_along_axis(equalObs, 0, d2m, bin_nr)
+    print("Getting freq bins ...")
 
+    xrange = len(t2m_da[0])
+    yrange = len(t2m_da[0][0])
+
+    print("Done, now initializing zero arrays ...")
     # initialising the for loop by making zeros array for t2m and d2m to mutate
-    binned_ds_t2m = np.zeros((len(bins_t2m[0]), len(bins_t2m[0][0])))
-    binned_ds_sig_t2m = np.zeros((len(bins_t2m[0]), len(bins_t2m[0][0])))
-    binned_ds_d2m = np.zeros((len(bins_d2m[0]), len(bins_d2m[0][0])))
-    binned_ds_sig_d2m = np.zeros((len(bins_d2m[0]), len(bins_d2m[0][0])))
+    slope_t2m_95 = np.empty((xrange, yrange))
+    p_t2m_95 = np.empty((xrange, yrange))
+    slope_t2m_50 = np.empty((xrange, yrange))
+    p_t2m_50 = np.empty((xrange, yrange))
+    slope_d2m_95 = np.empty((xrange, yrange))
+    p_d2m_95 = np.empty((xrange, yrange))
+    slope_d2m_50 = np.empty((xrange, yrange))
+    p_d2m_50 = np.empty((xrange, yrange))
+
+    print("Starting the loop ...")
 
     # starting loop
-    for lat in range(len(bins_t2m[0])):
-        for lon in range(len(bins_t2m[0][0])):
+    for lat in range(xrange):
+        for lon in range(yrange):
+            bins_t2m = equalObs(np.squeeze(t2m_da[:, lat, lon]), bin_nr)
+            bins_d2m = equalObs(np.squeeze(d2m_da[:, lat, lon]), bin_nr)
             # group the precipitation data according to the bins of temperature data
-            precip_t2m = precip_da.isel(lat = lat, lon = lon).groupby_bins(t2m_da.isel(lat = lat, lon = lon), bins_t2m[:, lat, lon], include_lowest=True, precision=10).quantile(percentile_val, interpolation='midpoint')
-            precip_d2m = precip_da.isel(lat = lat, lon = lon).groupby_bins(d2m_da.isel(lat = lat, lon = lon), bins_d2m[:, lat, lon], include_lowest=True, precision=10).quantile(percentile_val, interpolation='midpoint')
+            grouped_precip_t2m = precip_da.isel(lat = lat, lon = lon).groupby_bins(t2m_da.isel(lat = lat, lon = lon), bins_t2m, include_lowest=True, precision=10)
+            grouped_precip_d2m = precip_da.isel(lat = lat, lon = lon).groupby_bins(d2m_da.isel(lat = lat, lon = lon), bins_d2m, include_lowest=True, precision=10)
+            precip_t2m_95 = grouped_precip_t2m.quantile(0.95, interpolation='midpoint')
+            precip_t2m_50 = grouped_precip_t2m.quantile(0.50, interpolation='midpoint')
+            precip_d2m_95 = grouped_precip_d2m.quantile(0.95, interpolation='midpoint')
+            precip_d2m_50 = grouped_precip_d2m.quantile(0.50, interpolation='midpoint')
 
             # group the temperature data by temperature bins and take mean of each bin
-            mean_t2m = t2m_da.isel(lat = lat, lon = lon).groupby_bins(t2m_da.isel(lat = lat, lon = lon), bins_t2m[:, lat, lon], include_lowest=True, precision=10).mean(dim='time')
-            mean_d2m = d2m_da.isel(lat = lat, lon = lon).groupby_bins(d2m_da.isel(lat = lat, lon = lon), bins_d2m[:, lat, lon], include_lowest=True, precision=10).mean(dim='time')
+            mean_t2m = t2m_da.isel(lat = lat, lon = lon).groupby_bins(t2m_da.isel(lat = lat, lon = lon), bins_t2m, include_lowest=True, precision=10).mean(dim='time')
+            mean_d2m = d2m_da.isel(lat = lat, lon = lon).groupby_bins(d2m_da.isel(lat = lat, lon = lon), bins_d2m, include_lowest=True, precision=10).mean(dim='time')
 
-            # convert to numpy_array()
-            precip_t2m = precip_t2m.to_numpy()
-            precip_d2m = precip_d2m.to_numpy()
-            mean_t2m = mean_t2m.to_numpy()
-            mean_d2m = mean_d2m.to_numpy()
+            # getting the slope and p-value
+            slope_t2m_95[lat, lon], p_t2m_95[lat, lon] = get_res(mean_t2m, precip_t2m_95)
+            slope_t2m_50[lat, lon], p_t2m_50[lat, lon] = get_res(mean_t2m, precip_t2m_50)
+            slope_d2m_95[lat, lon], p_d2m_95[lat, lon] = get_res(mean_d2m, precip_d2m_95)
+            slope_d2m_50[lat, lon], p_d2m_50[lat, lon] = get_res(mean_d2m, precip_d2m_50)
 
-            # idx_t2m = np.argwhere(np.isnan(precip_t2m))
-            # idx_d2m = np.argwhere(np.isnan(precip_d2m))
+            print(f"Completed {lat+1}/{xrange} lat and {lon+1}/{yrange} lon")
 
-            # precip_t2m = np.delete(precip_t2m, idx_t2m)
-            # precip_d2m = np.delete(precip_d2m, idx_d2m)
+    print("Done, now writing ...")
 
-            # mean_t2m = np.delete(mean_t2m, idx_t2m)
-            # mean_d2m = np.delete(mean_d2m, idx_d2m)
+    return slope_t2m_95, p_t2m_95, slope_d2m_95, p_d2m_95, slope_t2m_50, p_t2m_50, slope_d2m_50, p_d2m_50
 
-            slope_t2m, r_t2m = get_res(mean_t2m, precip_t2m)
-            slope_d2m, r_d2m = get_res(mean_d2m, precip_d2m)
-
-            binned_ds_t2m[lat, lon] = binned_ds_t2m[lat, lon] + slope_t2m
-            binned_ds_sig_t2m[lat, lon] = binned_ds_sig_t2m[lat, lon] + r_t2m
-
-            binned_ds_d2m[lat, lon] = binned_ds_d2m[lat, lon] + slope_d2m
-            binned_ds_sig_d2m[lat, lon] = binned_ds_sig_d2m[lat, lon] + r_d2m
-
-    ccscale_t2m_slope = xr.DataArray(binned_ds_t2m, dims=("lat", "lon"), coords={"lat": precip_da.coords['lat'], "lon": precip_da.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
-
-    ccscale_t2m_r = xr.DataArray(binned_ds_sig_t2m, dims=("lat", "lon"), coords={"lat": precip_da.coords['lat'], "lon": precip_da.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
-
-    ccscale_d2m_slope = xr.DataArray(binned_ds_d2m, dims=("lat", "lon"), coords={"lat": precip_da.coords['lat'], "lon": precip_da.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
-
-    ccscale_d2m_r = xr.DataArray(binned_ds_sig_d2m, dims=("lat", "lon"), coords={"lat": precip_da.coords['lat'], "lon": precip_da.coords['lon']}, attrs=dict(description="C-C scale", units="degC$^{-1}$"))
-
-    return ccscale_t2m_slope, ccscale_t2m_r, ccscale_d2m_slope, ccscale_d2m_r
-
-# # trying an alternate function for binning
-# def get_binned_3d_alter(precip_da, t2m_da, d2m_da, percentile_val = 0.99, bin_nr = 12):
-#     # convert temperature data to numpy array
-#     t2m = t2m_da.to_numpy()
-#     d2m = d2m_da.to_numpy()
-#     precip = precip_da.to_numpy()
-
-#     # get the equal freq. bins from the temperature data
-#     # bins_t2m = np.apply_along_axis(equalObs, 0, t2m, bin_nr)
-#     # bins_d2m = np.apply_along_axis(equalObs, 0, d2m, bin_nr)
-#     bins_t2m = 20
-#     bins_d2m = 20
-
-#     # do the binning and get the slope and significance dataarrays
-#     ccscale_t2m_slope, ccscale_t2m_r = xr.apply_ufunc(binned_statistic, t2m_da, precip_da, input_core_dims=[["time"], ["time"]], kwargs={"bins":bins_t2m}, keep_attrs=False, dask="allowed")
-#     ccscale_d2m_slope, ccscale_d2m_r = xr.apply_ufunc(binned_statistic, d2m_da, precip_da, input_core_dims=[["time"], ["time"]], kwargs={"bins":bins_d2m}, keep_attrs=False, dask="allowed")
-
-#     return ccscale_t2m_slope, ccscale_t2m_r, ccscale_d2m_slope, ccscale_d2m_r
+    print("... Completed")

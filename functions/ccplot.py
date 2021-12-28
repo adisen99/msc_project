@@ -58,31 +58,28 @@ def plot(binned_precip, mean_temp, temparr, preciparr1, preciparr2, preciparr3, 
         plt.legend(frameon = False)
 
 # Plotting function for 3d binning plot
-def plot_3d(slope_da, r_da, extent_list, title, threshold_sig=0.95, marker_size=2, **kwargs):
+def plot_3d(slope_da, p_da, extent_list, title, threshold_sig=0.05, marker_size=1, freq=3, alpha_stipple=0.5, **kwargs):
     """
     Function to plot the output of binning 3d function
     -----
     inputs are -
     slope_da : datarray containing slope
-    r_da : datarray containing R^2 values for goodness of fit
+    p_da : datarray containing R^2 values for goodness of fit
     title : The title of the output plot
     extent_list : [59.9, 100.1, -0.1, 40.1]
     """
     ax = plt.axes(projection=ccrs.PlateCarree())
     ax.set_extent(extent_list, crs=ccrs.PlateCarree())
-    (100*(np.exp(slope_da) - 1)).plot.contourf(ax = ax, cbar_kwargs={"label":"C-C scale"}, **kwargs)
+    (100*(np.exp(slope_da) - 1)).plot.contourf(ax = ax, cbar_kwargs={"label":"C-C scale dP(%)/$^{o}$C$^{-1}$"}, **kwargs)
     # (100*(np.exp(slope_da) - 1)).plot.pcolormesh(ax = ax, cbar_kwargs={"label":"C-C scale"}, **kwargs)
     x, y = np.meshgrid(slope_da.coords['lon'], slope_da.coords['lat'])
-    plt.scatter(x[(np.abs(r_da.to_numpy()) > threshold_sig)],y[(np.abs(r_da.to_numpy()) > threshold_sig)], marker='o', color = 'k', s=marker_size)
-    gridliner = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True, linewidth=2, color='gray', alpha=0.05, linestyle='--')
+    plt.scatter(x[(np.abs(p_da.to_numpy()) < threshold_sig)][::freq],y[(np.abs(p_da.to_numpy()) < threshold_sig)][::freq], marker='o', color = 'k', s=marker_size, alpha=alpha_stipple)
+    gridliner = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True, linewidth=1, color='gray', alpha=0.05, linestyle='--')
     # ax.coastlines(alpha=0.7)
-    # ax.add_feature(cfeature.BORDERS, alpha=0.7)
-    ax.add_feature(cfeature.COASTLINE, alpha=1.0)
+    ax.add_feature(cfeature.BORDERS, alpha=1.0, lw=0.2)
+    ax.add_feature(cfeature.COASTLINE, alpha=1.0, lw=0.5)
     gridliner.top_labels = False
     gridliner.right_labels = False
-    gridliner.ylines = False  # you need False
-    gridliner.xlines = False  # you need False
+    gridliner.ylines = False
+    gridliner.xlines = False
     ax.set_title(title)
-    # ax.set_xlabel('Latitude')
-    # ax.set_ylabel('Longitude')
-    # ax.tick_params(axis='both', labelsize=12)
