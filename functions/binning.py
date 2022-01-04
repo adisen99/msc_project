@@ -85,6 +85,8 @@ def get_binned_3d(precip_da, t2m_da, d2m_da, bin_nr = 12):
         d2m_da : DPT data-array loaded in memory
         bin_nr : number of bins to make (does't have a signigicant difference in the slope
                 does make a difference in the p-value)
+    Output :
+        c-c scale regression slope and p-values for 50th percentile and 95th percentile precipitation and mean temperature values
     ______________________
     """
     print("Starting the binning process ...")
@@ -95,12 +97,10 @@ def get_binned_3d(precip_da, t2m_da, d2m_da, bin_nr = 12):
     d2m = d2m_da.to_numpy()
     precip = precip_da.to_numpy()
 
-    print("Getting freq bins ...")
-
     xrange = len(t2m_da[0])
     yrange = len(t2m_da[0][0])
 
-    print("Done, now initializing zero arrays ...")
+    print("Done, now initializing empty arrays ...")
     # initialising the for loop by making zeros array for t2m and d2m to mutate
     slope_t2m_95 = np.empty((xrange, yrange))
     p_t2m_95 = np.empty((xrange, yrange))
