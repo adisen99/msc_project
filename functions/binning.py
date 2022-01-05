@@ -136,7 +136,7 @@ def get_binned_3d(precip_da, t2m_da, d2m_da, bin_nr = 12):
             slope_d2m_95[lat, lon], p_d2m_95[lat, lon] = get_res(mean_d2m, precip_d2m_95)
             slope_d2m_50[lat, lon], p_d2m_50[lat, lon] = get_res(mean_d2m, precip_d2m_50)
 
-            print(f"Completed {lat+1}/{xrange} lat and {lon+1}/{yrange} lon")
+            print(f"Completed {lat+1}/{xrange} lat and {lon+1}/{yrange} lon", end="\r")
 
     print("Done, now writing ...")
 
