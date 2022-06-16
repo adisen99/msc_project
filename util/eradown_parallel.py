@@ -2,23 +2,24 @@
 
 import cdsapi
 import multiprocessing
+import os
 
 client = cdsapi.Client()
 
 def cdsapi_worker(dataset):
-    result = client.retrieve('reanalysis-era5-pressure-levels', dataset)
-    result.download(dataset['file_name'])
+    if not os.path.exists(dataset['file_name']):
+        result = client.retrieve('reanalysis-era5-single-levels', dataset)
+        result.download(dataset['file_name'])
 
 def single_dataset(yr, file_prefix):
     return {
         'product_type': 'reanalysis',
         'format': 'netcdf',
-        'variable': ['u_component_of_wind', 'v_component_of_wind'],
+        'variable': ['vertical_integral_of_eastward_water_vapour_flux', 'vertical_integral_of_northward_water_vapour_flux'],
         'area': [
             40, 60, 0,
             100,
         ],
-        'pressure_level': ['200', '850'],
         'year': str(yr),
         'month': [
             '01', '02', '03',
@@ -54,7 +55,7 @@ def single_dataset(yr, file_prefix):
     }
 
 # make the changes to this file to get the necessary values parallely
-datasets = [single_dataset(yr, 'wind_pres') for yr in range(2001,2021)]
+datasets = [single_dataset(yr, 'wv_flux') for yr in range(2000,2021)]
 
 # https://cds.climate.copernicus.eu/live/queue
 # per-user requests that access online CDS data is 3 at maximum

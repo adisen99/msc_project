@@ -5,8 +5,8 @@ import time
 c = cdsapi.Client()
 
 def down():
-    for year in range(2015,2016):
-        for month in range(1,13):
+    for year in range(2021,2022):
+        for month in range(1,12):
             use_year = str(year)
             if month < 10:
                 use_month = '0' + str(month)
@@ -48,6 +48,7 @@ def down():
                             '22', '23', '24',
                             '25', '26', '27',
                             '28', '29', '30',
+                            '31',
                         ],
                         'time': [
                             '00:00', '01:00', '02:00',
